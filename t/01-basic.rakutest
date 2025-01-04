@@ -1,0 +1,6 @@
+use Test;
+use CSS::Nested;
+
+pass "replace me";
+
+done-testing;

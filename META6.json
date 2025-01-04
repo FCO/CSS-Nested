@@ -1,0 +1,26 @@
+{
+  "auth": "zef:FCO",
+  "authors": [
+    "Fernando Corrêa de Oliveira"
+  ],
+  "build-depends": [
+  ],
+  "depends": [
+    "CSS::Grammar"
+  ],
+  "description": "CSS::Grammar, but nested",
+  "license": "Artistic-2.0",
+  "name": "CSS::Nested",
+  "perl": "6.d",
+  "provides": {
+    "CSS::Nested": "lib/CSS/Nested.rakumod"
+  },
+  "resources": [
+  ],
+  "source-url": "https://github.com/FCO/CSS-Nested.git",
+  "tags": [
+  ],
+  "test-depends": [
+  ],
+  "version": "0.0.1"
+}
