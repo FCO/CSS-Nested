@@ -10,7 +10,11 @@ rule any-declaration  {
 	|| <dropped-decl>
 }
 
+multi rule combinator:sym<&> { <sym> }
+rule selector{ <op=.combinator>? <simple-selector> +%% <op=.combinator>? }
+
 class Actions is CSS::Grammar::Actions {
+	method combinator:sym<&>($/) { make (:op<&>) }
 	method any-declaration($/)    {
 		use CSS::Grammar::Defs :CSSObject, :CSSValue, :CSSUnits, :CSSSelector;
 
@@ -36,7 +40,10 @@ sub parse-stylesheet($css) is export {
     CSS::Nested.parse($css, :$actions)
        or die "unable to parse: $css";
 
-    .throw for $actions.warnings[];
+    if $actions.warnings[] {
+	    .note for $actions.warnings[];
+	    die
+    }
 
     return process-ast $/.ast
 }
@@ -69,7 +76,16 @@ sub process-ast($ast) {
 
 sub merge-selectors(@parent, @child) {
 	|do for @parent X @child -> [%p-selectors, %c-selectors] {
-		selector => [ |%p-selectors<selector>[], |%c-selectors<selector>[] ]
+		my @p = %p-selectors<selector>[];
+		my @c = %c-selectors<selector>[];
+		selector => do if (@c.head<op> // '') eq '&' {
+			@c.shift;
+			my @pss = @p.tail<simple-selector>[];
+			my @css = @c.head<simple-selector>[];
+			[ |@p.head(*-1), simple-selector => [|@pss, |@css], |(@c.skip if @c) ];
+		} else {
+			[ |%p-selectors<selector>[], |%c-selectors<selector>[] ]
+		}
 	}
 }
 
