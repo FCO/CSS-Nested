@@ -107,6 +107,8 @@ use CSS::Nested;
 
 CSS::Nested is CSS, but nested
 
+Still very early stage of development. It has no tests yet!
+
 =head1 AUTHOR
 
 Fernando Corrêa de Oliveira <fco@cpan.org>

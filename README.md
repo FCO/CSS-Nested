@@ -17,6 +17,8 @@ DESCRIPTION
 
 CSS::Nested is CSS, but nested
 
+Still very early stage of development. It has no tests yet!
+
 AUTHOR
 ======
 
