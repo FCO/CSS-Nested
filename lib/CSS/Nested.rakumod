@@ -36,6 +36,8 @@ sub parse-stylesheet($css) is export {
     CSS::Nested.parse($css, :$actions)
        or die "unable to parse: $css";
 
+    .throw for $actions.warnings[];
+
     return process-ast $/.ast
 }
 
@@ -67,11 +69,7 @@ sub process-ast($ast) {
 
 sub merge-selectors(@parent, @child) {
 	|do for @parent X @child -> [%p-selectors, %c-selectors] {
-		selector => do for %p-selectors<selector>[] X %c-selectors<selector>[] -> [%p-selector, %c-selector] {
-			simple-selector => do for %p-selector<simple-selector>[] X %c-selector<simple-selector>[] -> [%pss, %css] {
-				%pss, %css
-			}
-		}
+		selector => [ |%p-selectors<selector>[], |%c-selectors<selector>[] ]
 	}
 }
 
